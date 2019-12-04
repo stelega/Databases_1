@@ -1,0 +1,21 @@
+1. SELECT ename, dname FROM emp INNER JOIN dept ON emp.deptno = dept.deptno WHERE EXISTS 	(SELECT losal, hisal, grade FROM salgrade WHERE grade = 3 AND emp.sal BETWEEN salgrade.losal AND salgrade.hisal);
+
+2. SELECT ename, dname, grade FROM emp INNER JOIN dept ON emp.deptno = dept.deptno INNER JOIN salgrade ON emp.sal BETWEEN salgrade.losal AND salgrade.hisal;
+
+3. SELECT e.ename, e.deptno FROM emp e WHERE e.sal < (SELECT sal FROM emp WHERE empno = e.mgr);
+4. SELECT job, max(sal) FROM emp GROUP BY job;
+5. SELECT dname, avg(sal) FROM emp INNER JOIN dept ON dept.deptno = emp.deptno GROUP BY dept.dname HAVING count(empno) > 3;
+
+6. SELECT avg(sal) FROM emp WHERE job != 'MANAGER';
+7. SELECT dname, avg(sal) FROM emp INNER JOIN dept ON dept.deptno = emp.deptno GROUP BY dept.dname HAVING count(empno) > 3;
+
+8. SELECT max(sal) - min(sal) FROM emp;
+9. SELECT grade, max(sal) FROM emp INNER JOIN salgrade ON emp.sal BETWEEN salgrade.losal AND	salgrade.hisal GROUP BY grade ORDER BY grade;
+
+10.SELECT sal FROM emp GROUP BY sal HAVING COUNT(sal) > 1;
+11.SELECT AVG(sal) FROM emp INNER JOIN salgrade ON grade = 2 AND emp.sal BETWEEN salgrade.losal AND hisal;
+
+12.SELECT mgr, MIN(sal) FROM emp GROUP BY mgr HAVING MIN(sal) > 1000 ORDER BY MIN(sal);
+13.SELECT job FROM emp GROUP BY job HAVING AVG(sal) >= 3000;
+14.SELECT deptno, job, AVG(sal) FROM emp GROUP BY deptno, job;
+

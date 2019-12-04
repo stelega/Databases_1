@@ -1,0 +1,40 @@
+1)
+CREATE TRIGGER disc AFTER INSERT ON orderinfo FOR EACH ROW EXECUTE PROCEDURE fun1();
+
+
+CREATE OR REPLACE FUNCTION fun1() RETURNS TRIGGER LANGUAGE plpgsql
+	AS $$
+		DECLARE
+			tmp INTEGER;
+		BEGIN
+			tmp = NEW.customer_id;
+			IF (SELECT COUNT(o.orderinfo_id) from orderinfo o WHERE o.customer_id = tmp )%10 = 0 THEN
+				UPDATE customer SET discount = discount + 2 WHERE customer_id = tmp;
+			END IF;
+			RETURN NULL;
+		END;
+	$$;
+
+
+2)
+CREATE TRIGGER free_shipping AFTER INSERT ON orderinfo FOR EACH ROW EXECUTE PROCEDURE fun2();
+
+CREATE OR REPLACE FUNCTION fun2() RETURNS TRIGGER LANGUAGE plpgsql
+	AS $$
+		BEGIN
+			IF ( NEW.date_shipped - NEW.date_placed ) > 3 THEN
+				UPDATE orderinfo SET shipping = 0.00 where orderinfo_id = NEW.orderinfo_id;
+			END IF;
+			RETURN NULL;
+		END;
+	$$;
+
+INSERT INTO orderinfo (orderinfo_id, customer_id, date_placed, date_shipped, shipping) values (6, 3, '2000-05-07', '2000-05-09', 2.99);
+INSERT INTO orderinfo (orderinfo_id, customer_id, date_placed, date_shipped, shipping) values (7, 3, '2000-05-07', '2000-05-12', 2.99);
+
+
+3) Nie rozumiem polecenia :(
+
+
+
+
